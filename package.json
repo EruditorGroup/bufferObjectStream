@@ -1,0 +1,26 @@
+{
+  "name": "bufferObjectStream",
+  "version": "1.0.0",
+  "description": "Buffered object stream transformer with buffer size and commit interval",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:EruditorGroup/bufferObjectStream.git"
+  },
+  "keywords": [
+    "buffered",
+    "stream",
+    "with",
+    "time",
+    "interval"
+  ],
+  "author": "novoden80",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EruditorGroup/bufferObjectStream/issues"
+  },
+  "homepage": "https://github.com/EruditorGroup/bufferObjectStream"
+}

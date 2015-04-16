@@ -33,7 +33,7 @@ BufferTransform.prototype._resetSchedule = function() {
   clearTimeout(this.lock);
   this._timeOver = false;
   this.lock = null;
-}
+};
 
 BufferTransform.prototype.schedule = function(reset) {
   var self = this;
@@ -45,14 +45,14 @@ BufferTransform.prototype.schedule = function(reset) {
       self._timeOver = true;
     },this._commitDelay);
   }
-}
+};
 
 BufferTransform.prototype._transform = function(obj, encoding, done) {
   var queue = this._queue;
   queue.push(obj);
   this.schedule();
   if (queue >= this._commitSize || this._timeOver) {
-    this.push(queue.splice(0,queue.length - 1));
+    this.push(queue.splice(0,queue.length));
     this.schedule(true);
   }
   done();
@@ -61,10 +61,10 @@ BufferTransform.prototype._transform = function(obj, encoding, done) {
 
 BufferTransform.prototype._flush = function(done) {
   var queue = this._queue;
-  this.push(queue.splice(0,queue.length - 1));
+  this.push(queue.splice(0,queue.length));
   this._resetSchedule();
   done();
-}
+};
 
 
 /* Null stream */

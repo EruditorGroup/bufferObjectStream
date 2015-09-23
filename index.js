@@ -51,7 +51,7 @@ BufferTransform.prototype._transform = function(obj, encoding, done) {
   var queue = this._queue;
   queue.push(obj);
   this.schedule();
-  if (queue >= this._commitSize || this._timeOver) {
+  if (queue.length >= this._commitSize || this._timeOver) {
     this.push(queue.splice(0,queue.length));
     this.schedule(true);
   }

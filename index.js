@@ -7,9 +7,13 @@ var Transform = require('stream').Transform;
 
 util.inherits(BufferTransform, Transform);
 util.inherits(NullStream, Transform);
+util.inherits(FlattenTransform, Transform);
 
-module.exports.NullStream = NullStream;
-module.exports.BufferTransformStream = BufferTransform;
+module.exports = {
+  NullStream: NullStream,
+  FlattenTransformStream: FlattenTransform,
+  BufferTransformStream: BufferTransform
+};
 
 /* Buffered transform stream */
 
@@ -49,7 +53,7 @@ BufferTransform.prototype.schedule = function(reset) {
 
 BufferTransform.prototype._transform = function(obj, encoding, done) {
   var queue = this._queue;
-  queue.push(obj);
+  queue[queue.length] = obj;
   this.schedule();
   if (queue.length >= this._commitSize || this._timeOver) {
     this.push(queue.splice(0,queue.length));
@@ -78,4 +82,28 @@ function NullStream(options) {
 
 NullStream.prototype._transform = function(chunk, encoding, cb) {
   cb();
+};
+
+
+/* Flat transform stream */
+
+function FlattenTransform(options) {
+  options = options || {};
+  options.objectMode = true;
+
+  if (!(this instanceof FlattenTransform))
+    return new FlattenTransform(options);
+
+  Transform.call(this, options);
+}
+
+FlattenTransform.prototype._transform = function(obj, encoding, done) {
+  if (Array.isArray(obj)) {
+    for (var i = 0, len = obj.length; i < len; i++) {
+      this.push(obj[i]);
+    }
+  } else {
+    this.push(obj);
+  }
+  done();
 };

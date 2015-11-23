@@ -1,6 +1,6 @@
 {
   "name": "bufferObjectStream",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Buffered object stream transformer with buffer size and commit interval",
   "main": "index.js",
   "scripts": {

@@ -26,7 +26,7 @@ function BufferTransform(options) {
   this._commitDelay = options.commitDelay || 100;
   this._commitSize = options.commitSize || 200;
 
-  this._timeOver = false;
+  //this._timeOver = false;
   this._queue = [];
   this.lock = null;
 
@@ -35,7 +35,7 @@ function BufferTransform(options) {
 
 BufferTransform.prototype._resetSchedule = function() {
   clearTimeout(this.lock);
-  this._timeOver = false;
+  //this._timeOver = false;
   this.lock = null;
 };
 
@@ -46,7 +46,8 @@ BufferTransform.prototype.schedule = function(reset) {
   }
   if (!this.lock) {
     this.lock = setTimeout(function() {
-      self._timeOver = true;
+      //self._timeOver = true;
+      self._flush();
     },this._commitDelay);
   }
 };
@@ -55,7 +56,7 @@ BufferTransform.prototype._transform = function(obj, encoding, done) {
   var queue = this._queue;
   queue[queue.length] = obj;
   this.schedule();
-  if (queue.length >= this._commitSize || this._timeOver) {
+  if (queue.length >= this._commitSize) { // || this._timeOver
     this.push(queue.splice(0,queue.length));
     this.schedule(true);
   }
@@ -65,9 +66,11 @@ BufferTransform.prototype._transform = function(obj, encoding, done) {
 
 BufferTransform.prototype._flush = function(done) {
   var queue = this._queue;
-  this.push(queue.splice(0,queue.length));
+  if (queue.length) {
+    this.push(queue.splice(0, queue.length));
+  }
   this._resetSchedule();
-  done();
+  if (done) done();
 };
 
 
